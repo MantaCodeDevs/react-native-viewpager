@@ -42,6 +42,7 @@ var ViewPager = React.createClass({
     autoPlay: PropTypes.bool,
     animation: PropTypes.func,
     initialPage: PropTypes.number,
+	minPan: PropTypes.number,
   },
 
   fling: false,
@@ -58,6 +59,7 @@ var ViewPager = React.createClass({
             tension: 50,
           })
       },
+	  minPan: 2,
     }
   },
 
@@ -92,7 +94,8 @@ var ViewPager = React.createClass({
     this._panResponder = PanResponder.create({
       // Claim responder if it's a horizontal pan
       onMoveShouldSetPanResponder: (e, gestureState) => {
-        if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
+		var absDx = Math.abs(gestureState.dx);
+        if (absDx > Math.abs(gestureState.dy) && absDx > this.props.minPan) {
           if (/* (gestureState.moveX <= this.props.edgeHitWidth ||
               gestureState.moveX >= deviceWidth - this.props.edgeHitWidth) && */
                 this.props.locked !== true && !this.fling) {
